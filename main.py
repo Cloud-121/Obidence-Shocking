@@ -91,11 +91,6 @@ else:
                 await message.channel.send('pong')
             
             #Check if from whitelisted channels or users
-            print(f"Channel ID: {message.channel.id}")
-            print(f"User ID: {message.author.id}")
-            print(get_settings("discord_channels"))
-            if str(message.channel.id) in get_settings("discord_channels"):
-                print("Message from whitelisted channel")
             if message.channel.id in get_settings("discord_channels") or message.author.id in get_settings("always_allowed_users"):
                 print(f"Message from {message.author}: {message.content}")
                 #Check if message from self
