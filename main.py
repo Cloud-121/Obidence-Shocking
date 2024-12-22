@@ -91,7 +91,12 @@ else:
                 await message.channel.send('pong')
             
             #Check if from whitelisted channels or users
-            if message.channel.id in get_settings("channels") or message.author.id in get_settings("users"):
+            print(f"Channel ID: {message.channel.id}")
+            print(f"User ID: {message.author.id}")
+            print(get_settings("discord_channels"))
+            if str(message.channel.id) in get_settings("discord_channels"):
+                print("Message from whitelisted channel")
+            if message.channel.id in get_settings("discord_channels") or message.author.id in get_settings("always_allowed_users"):
                 print(f"Message from {message.author}: {message.content}")
                 #Check if message from self
                 if message.author == self.user:
@@ -100,6 +105,7 @@ else:
                         if count > 0:
                             print(f"{message.author} said a prohibited word: {message.content}")
                             increase_score((get_settings("harm_words_decrease")) * count)
+                            print(f"Score: {get_settings('score')}")
                 else:
                     #Check if message contains decrease score
                     for word in get_settings("decrease_words"):
@@ -107,12 +113,14 @@ else:
                         if count > 0:
                             print(f"{message.author} said a decrease word: {message.content}")
                             increase_score((get_settings("decrease_words_increase")) * count)
+                            print(f"Score: {get_settings('score')}")
                     #Check if message contains increase score
                     for word in get_settings("increase_words"):
                         count = message.content.lower().count(word)
                         if count > 0:
                             print(f"{message.author} said an increase word: {message.content}")
                             increase_score((get_settings("increase_words_decrease")) * count)
+                            print(f"Score: {get_settings('score')}")
 
 
     client = MyClient()
