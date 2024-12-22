@@ -102,20 +102,21 @@ else:
                             increase_score((get_settings("harm_words_decrease")) * count)
                             print(f"Score: {get_settings('score')}")
                 else:
-                    #Check if message contains decrease score
-                    for word in get_settings("decrease_words"):
-                        count = message.content.lower().count(word)
-                        if count > 0:
-                            print(f"{message.author} said a decrease word: {message.content}")
-                            increase_score((get_settings("decrease_words_increase")) * count)
-                            print(f"Score: {get_settings('score')}")
-                    #Check if message contains increase score
-                    for word in get_settings("increase_words"):
-                        count = message.content.lower().count(word)
-                        if count > 0:
-                            print(f"{message.author} said an increase word: {message.content}")
-                            increase_score((get_settings("increase_words_decrease")) * count)
-                            print(f"Score: {get_settings('score')}")
+                    if message.mentions and message.mentions[0].id == self.user.id or message.reference and message.reference.resolved and message.reference.resolved.author.id == self.user.id:
+                        #Check if message contains decrease score
+                        for word in get_settings("decrease_words"):
+                            count = message.content.lower().count(word)
+                            if count > 0:
+                                print(f"{message.author} said a decrease word: {message.content}")
+                                increase_score((get_settings("decrease_words_increase")) * count)
+                                print(f"Score: {get_settings('score')}")
+                        #Check if message contains increase score
+                        for word in get_settings("increase_words"):
+                            count = message.content.lower().count(word)
+                            if count > 0:
+                                print(f"{message.author} said an increase word: {message.content}")
+                                increase_score((get_settings("increase_words_decrease")) * count)
+                                print(f"Score: {get_settings('score')}")
 
 
     client = MyClient()
