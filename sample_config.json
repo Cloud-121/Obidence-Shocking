@@ -1,0 +1,40 @@
+{
+    "api_token": "",
+    "deviceid": "",
+    "discord_token": "",
+    "discord_channels": [
+        "",
+        ""
+    ],
+    "always_allowed_users": [
+        ""
+    ],
+    "harm_words": [
+        "foss",
+        "opensource",
+        "open source",
+        "closed source",
+        "proitary",
+        "proprietary"
+    ],
+    "harm_words_decrease": 20,
+    "improve_words_from_others": [
+        "good",
+        "great",
+        "awesome",
+        "nice",
+        "amazing"
+    ],
+    "improve_words_from_others_increase": 5,
+    "harm_words_from_others": [
+        "bad",
+        "poor",
+        "terrible",
+        "awful",
+        "terrible",
+        "useless"
+    ],
+    "harm_words_from_others_decrease": 10,
+    "base_url": "https://api.openshock.app",
+    "score": 0
+}
