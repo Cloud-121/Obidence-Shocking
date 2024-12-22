@@ -1,3 +1,4 @@
+#Made by Cloud (aka Scarlett) to have fun with myself :3
 import time
 import discord
 from OpenShockAPI import OpenShockAPI
@@ -22,26 +23,37 @@ def increase_score(amount):
     set_settings("score", get_settings("score") + amount)
 
 def shock(power, duration):
-    openshock = OpenShockAPI(token=(get_settings("api_token")), base_url=(get_settings("base_url")))
-    shocks = [{
-        "id": (get_settings("deviceid")),
-        "type": "Shock",
-        "intensity": power,
-        "duration": duration,
-        "exclusive": True
-    }]
-    response = openshock.control_device(shocks=shocks, custom_name="Stopfossing shocking")
+    try:
+        openshock = OpenShockAPI(token=(get_settings("api_token")), base_url=(get_settings("base_url")))
+        shocks = [{
+            "id": (get_settings("deviceid")),
+            "type": "Shock",
+            "intensity": power,
+            "duration": duration,
+            "exclusive": True
+        }]
+        print(f"Shocking with power: {power}, duration: {duration}")
+        response = openshock.control_device(shocks=shocks, custom_name="Stopfossing_shocking")
+    except Exception as e:
+        print("OpenShock Connection Failed")
+        print(e)
+    
 
 def vibrate(power, duration):
-    openshock = OpenShockAPI(token=(get_settings("api_token")), base_url=(get_settings("base_url")))
-    shocks = [{
-        "id": (get_settings("deviceid")),
-        "type": "Vibrate",
-        "intensity": power,
-        "duration": duration,
-        "exclusive": True
-    }]
-    response = openshock.control_device(shocks=shocks, custom_name="Stopfossing vibrating")
+    try:
+        openshock = OpenShockAPI(token=(get_settings("api_token")), base_url=(get_settings("base_url")))
+        shocks = [{
+            "id": (get_settings("deviceid")),
+            "type": "Vibrate",
+            "intensity": power,
+            "duration": duration,
+            "exclusive": True
+        }]
+        print(f"Vibrating with power: {power}, duration: {duration}")
+        response = openshock.control_device(shocks=shocks, custom_name="Stopfossing_vibrating")
+    except Exception as e:
+        print("OpenShock Connection Failed")
+        print(e)
 
 
 #Check OpenShock Connection
@@ -101,6 +113,21 @@ else:
                             print(f"{message.author} said a prohibited word: {message.content}")
                             increase_score((get_settings("harm_words_decrease")) * count)
                             print(f"Score: {get_settings('score')}")
+
+                    #Check if message needs vibration
+                    if (get_settings("score")) >= 100 and (get_settings("score")) <= 200:
+                        print(f"Score above 100, Preforming calculations")
+                        score = get_settings("score")
+                        percent = ((score - 100) / 100) * 100
+                        vibrate(percent, 1)
+                    #Check if message needs shocking
+                    elif (get_settings("score")) > 200:
+                        print(f"Score above 200, Performing calculations")
+                        score = get_settings("score")
+                        duration = ((score - 200) / 800) * 30
+                        percent = ((score - 200) / 800) * 100
+                        shock(percent, duration)
+
                 else:
                     if message.mentions and message.mentions[0].id == self.user.id or message.reference and message.reference.resolved and message.reference.resolved.author.id == self.user.id:
                         #Check if message contains decrease score
