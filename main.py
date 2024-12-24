@@ -23,6 +23,7 @@ def get_settings(name):
 def increase_score(amount):
     set_settings("score", get_settings("score") + amount)
 
+#Why haven't I implented this yet in the the OpenShockAPI libary x3
 def shock(power, duration):
     try:
         openshock = OpenShockAPI(token=(get_settings("api_token")), base_url=(get_settings("base_url")))
@@ -39,7 +40,7 @@ def shock(power, duration):
         print("OpenShock Connection Failed")
         print(e)
     
-
+#I don't know why, I really need to...
 def vibrate(power, duration):
     try:
         openshock = OpenShockAPI(token=(get_settings("api_token")), base_url=(get_settings("base_url")))
