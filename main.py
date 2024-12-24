@@ -3,6 +3,7 @@ import time
 import discord
 from OpenShockAPI import OpenShockAPI
 import json
+import asyncio
 
 
 #Functions
@@ -95,9 +96,6 @@ else:
             print('Logged on as', self.user)
 
         async def on_message(self, message):
-            # only respond to ourselves
-            if message.author != self.user:
-                return
 
             if message.content == 'ping':
                 await message.channel.send('pong')
@@ -105,6 +103,46 @@ else:
             #Check if from whitelisted channels or users
             if message.channel.id in get_settings("discord_channels") or message.author.id in get_settings("always_allowed_users"):
                 print(f"Message from {message.author}: {message.content}")
+
+
+                # Check for "@user shock (power) (time)" command
+                if message.content.startswith(f"<@{self.user.id}> shock"):
+                    try:
+                        parts = message.content.split()
+                        print(parts)
+                        if len(parts) == 4:
+                            power = int(parts[2])
+                            time = int(parts[3])
+                            if 0 <= power <= 100 and time > 0:
+                                shock(power, time)
+                                await asyncio.sleep(3)
+                                await message.channel.send(f"Sending shock with power {power} for {time} seconds :33")
+                            else:
+                                await print("Invalid power or time values.")
+                        else:
+                            await print("Invalid command format. Use '@user shock (power) (time)'.")
+                    except ValueError:
+                        await print("Invalid power or time values.")
+
+                # Check for "@user vibrate (power) (time)" command
+                elif message.content.startswith(f"<@{self.user.id}> vibrate"):
+                    try:
+                        parts = message.content.split()
+                        if len(parts) == 4:
+                            power = int(parts[2])
+                            time = int(parts[3])
+                            if 0 <= power <= 100 and time > 0:
+                                vibrate(power, time)
+                                await asyncio.sleep(3)
+                                await message.channel.send(f"Vibrating with power {power} for {time} seconds x3")
+                            else:
+                                await print("Invalid power or time values.")
+                        else:
+                            await print("Invalid command format. Use '@user vibrate (power) (time)'.")
+                    except ValueError:
+                        await print("Invalid power or time values.")
+
+
                 #Check if message from self
                 if message.author == self.user:
                     for word in get_settings("harm_words"):
@@ -113,20 +151,21 @@ else:
                             print(f"{message.author} said a prohibited word: {message.content}")
                             increase_score((get_settings("harm_words_decrease")) * count)
                             print(f"Score: {get_settings('score')}")
-
-                    #Check if message needs vibration
-                    if (get_settings("score")) >= 100 and (get_settings("score")) <= 200:
-                        print(f"Score above 100, Preforming calculations")
-                        score = get_settings("score")
-                        percent = ((score - 100) / 100) * 100
-                        vibrate(percent, 1)
-                    #Check if message needs shocking
-                    elif (get_settings("score")) > 200:
-                        print(f"Score above 200, Performing calculations")
-                        score = get_settings("score")
-                        duration = ((score - 200) / 800) * 30
-                        percent = ((score - 200) / 800) * 100
-                        shock(percent, duration)
+                    
+                    if count > 0:
+                    #Check if me  ssage needs vibration
+                        if (get_settings("score")) >= 100 and (get_settings("score")) <= 200:
+                            print(f"Score above 100, Preforming calculations")
+                            score = get_settings("score")
+                            percent = ((score - 100) / 100) * 100
+                            vibrate(percent, 1)
+                        #Check if message needs shocking
+                        elif (get_settings("score")) > 200:
+                            print(f"Score above 200, Performing calculations")
+                            score = get_settings("score")
+                            duration = ((score - 200) / 800) * 30
+                            percent = ((score - 200) / 800) * 100
+                            shock(percent, duration)
 
                 else:
                     if message.mentions and message.mentions[0].id == self.user.id or message.reference and message.reference.resolved and message.reference.resolved.author.id == self.user.id:
