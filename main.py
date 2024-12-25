@@ -97,9 +97,6 @@ else:
             print('Logged on as', self.user)
 
         async def on_message(self, message):
-
-            if message.content == 'ping':
-                await message.channel.send('pong')
             
             #Check if from whitelisted channels or users
             if message.channel.id in get_settings("discord_channels") or message.author.id in get_settings("always_allowed_users"):
